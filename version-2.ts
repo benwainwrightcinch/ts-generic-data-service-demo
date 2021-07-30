@@ -2,7 +2,7 @@ import aws from 'aws-sdk'
 import { DocumentClient, ScanInput } from 'aws-sdk/clients/dynamodb'
 import pMap from 'p-map'
 
-interface Vehicle {
+export interface Vehicle {
   windows: number
   name: string
   canFly: boolean
@@ -47,7 +47,7 @@ const parallelScan = async (scanParams: ScanInput): Promise<Record<string, unkno
       const { Items, LastEvaluatedKey } = await dynamoDb.scan(params).promise()
       ExclusiveStartKey = LastEvaluatedKey
 
-      docs.push(...((Items ?? []) as T[]))
+      docs.push(...((Items ?? []) as Record<string, unknown>[]))
     } while (ExclusiveStartKey)
   })
 
@@ -56,7 +56,7 @@ const parallelScan = async (scanParams: ScanInput): Promise<Record<string, unkno
 
 }
 
-export default class DataService {
+export class DataService {
 
   private getTableParams(prefix: string) {
     return { TableName: `${prefix}${process.env.SERVERLESS_STAGE}` }
@@ -109,8 +109,7 @@ export default class DataService {
     // }}}
 
   }
-
-  async getAll(columns: string[]): Promise<Record<string, unknown>[]> {
+  async getAll(columns?: string[]): Promise<Record<string, unknown>[]> {
 
     // {{{
     interface ExpressionAttributeNames {
