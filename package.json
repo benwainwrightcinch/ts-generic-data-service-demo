@@ -1,0 +1,12 @@
+{
+  "name": "ts-generic-data-service-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/benwainwrightcinch/ts-generic-data-service-demo.git",
+  "author": "Ben Wainwright <ben.wainwright@cinch.co.uk>",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.957.0",
+    "typescript": "^4.3.5"
+  }
+}
