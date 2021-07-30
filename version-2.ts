@@ -19,6 +19,8 @@ const getSafeSelectByfieldParms = (field: string, value: string) => ({
 })
 
 const parallelScan = async (scanParams: ScanInput): Promise<Record<string, unknown>[]> => {
+
+  // {{{
   const dynamoDb = new aws.DynamoDB.DocumentClient({
     httpOptions: {
       timeout: 60000 * 5, // 5 minutes
@@ -50,29 +52,38 @@ const parallelScan = async (scanParams: ScanInput): Promise<Record<string, unkno
   })
 
   return docs
+  // }}}
+
 }
 
 export default class DataService {
+
   private getTableParams(prefix: string) {
     return { TableName: `${prefix}${process.env.SERVERLESS_STAGE}` }
   }
 
   private dynamoDb: DocumentClient
 
-  constructor(private tableNamePrefix: N) {
+  constructor(private tableNamePrefix: string) {
     this.dynamoDb = new aws.DynamoDB.DocumentClient()
   }
 
   async putItem(item: Record<string, unknown>): Promise<void> {
+
+    // {{{
     await this.dynamoDb
       .put({
         ...this.getTableParams(this.tableNamePrefix),
         Item: item,
       })
       .promise()
+    // }}}
+      
   }
 
   async waitForItemByFieldToBeConsistent(field: string, value: string): Promise<void> {
+
+    // {{{
     await this.dynamoDb
       .query({
         ...this.getTableParams(this.tableNamePrefix),
@@ -80,9 +91,13 @@ export default class DataService {
         ConsistentRead: true,
       })
       .promise()
+    // }}}
+
   }
 
   async getItemsByField(field: string, value: string): Promise<Record<string, unknown>[]> {
+    
+    // {{{
     const result = await this.dynamoDb
       .query({
         ...this.getTableParams(this.tableNamePrefix),
@@ -91,9 +106,13 @@ export default class DataService {
       .promise()
 
     return (result.Items ?? []) as Record<string, unknown>[]
+    // }}}
+
   }
 
   async getAll(columns: string[]): Promise<Record<string, unknown>[]> {
+
+    // {{{
     interface ExpressionAttributeNames {
       [key: string]: string
     }
@@ -114,5 +133,7 @@ export default class DataService {
       : this.getTableParams(this.tableNamePrefix)
 
     return await parallelScan(scanParams)
+    // }}}
+
   }
 }
