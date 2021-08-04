@@ -98,7 +98,7 @@ export class NewDataService {
 
   }
 
-                                                       // Problem 4: Return value is too permissive
+                                                       // Problem 4: Client has to do its own type checking -> Many will just typecast
                                                        // Problem 5: If you fix this, you still might mis-match the type to the table
   async getItemsByField(field: string, value: string): Promise<Record<string, unknown>[]> {
     

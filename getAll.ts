@@ -5,11 +5,29 @@
   *   - change the return value to undefined if there are *no* columns
   */
 
-type ColumnsArray<D> =
+/**
+  * Generic type that represents a readonly array that
+  * can only contain all the keys of D
+  */
+type ColumnsArray<D> = never
 
-// Notes for Ben - C extends CA<D> or undefined. Use C[number] to get union type
-type DataSubset<D, C>  =
+/*
+ * Generic type that represents a subset of the Data Type (D),
+ * picking only the keys present in C (which must extend ColumnsArray) 
+ */
+type DataSubset<D, C extends ColumnsArray<D>> = never
 
-export const getAll = async (columns?: string): Promise<Record<string, unknown>> => {
+/**
+ * Generic type that represents EITHER DataSubset OR the full Data Item
+ * depending on whether C extends columnsArray
+ */
+type DataSubsetOrEverything<D, C extends ColumnsArray<D> | undefined> = never
+ 
+
+export const getAll = async (columns?: string[]): Promise<Record<string, unknown>> => {
+
+  // {{{
   return Promise.resolve(undefined)
+  // }}}
+
 }

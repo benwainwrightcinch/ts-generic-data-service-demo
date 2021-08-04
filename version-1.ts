@@ -1,12 +1,7 @@
-interface Vehicle {
-  windows: number,
-  name: string,
-  canFly: boolean
-}
-
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import pMap from 'p-map'
 import AWS from "aws-sdk"
+import { Vehicle } from './use-service'
 
 const buildDefaultParams = () => {
   const stage = process.env.SERVERLESS_STAGE

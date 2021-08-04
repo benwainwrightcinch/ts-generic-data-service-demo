@@ -64,10 +64,12 @@ export class DataService {
 
   private dynamoDb: DocumentClient
 
+  // Problem 1: Input invalid data
   constructor(private tableNamePrefix: string) {
     this.dynamoDb = new aws.DynamoDB.DocumentClient()
   }
 
+  // Problem 2: Incorrect tablename
   async putItem(item: Record<string, unknown>): Promise<void> {
 
     // {{{
@@ -81,6 +83,7 @@ export class DataService {
       
   }
 
+  // Problem 3: Incorrect field
   async waitForItemByFieldToBeConsistent(field: string, value: string): Promise<void> {
 
     // {{{
@@ -95,6 +98,8 @@ export class DataService {
 
   }
 
+                                                       // Problem 4: No information about available keys, Client has to do its own type checking -> Many will just typecast
+                                                       // Problem 5: If you fix this, you still might mis-match the type to the table
   async getItemsByField(field: string, value: string): Promise<Record<string, unknown>[]> {
     
     // {{{
@@ -109,6 +114,7 @@ export class DataService {
     // }}}
 
   }
+                                    // Problem 6: If you make this stricter, the return value has less fields than the declared type
   async getAll(columns?: string[]): Promise<Record<string, unknown>[]> {
 
     // {{{
